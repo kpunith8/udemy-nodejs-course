@@ -1,0 +1,18 @@
+body {
+  margin: 0 auto;
+  padding: 0;
+  box-sizing: border-box;
+  min-width: 80vw;
+}
+
+.main {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.page-not-found {
+  text-align: center;
+  height: 100vh;
+  line-height: 100vh;
+}
