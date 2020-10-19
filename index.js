@@ -8,6 +8,7 @@ const shopRoutes = require('./routes/shop');
 const { rootDir, loadUsersJson } = require('./utils');
 
 const { PORT } = require('./config');
+const { pageNotFound } = require('./controllers/error-controller');
 
 const app = express();
 
@@ -48,10 +49,7 @@ app.get('/users', async (req, res) => {
 
 // Add 404 Error page at the end to handle unhandled routes
 // Should be added at the end once all the routes are defined
-app.use((req, res) => {
-  res.render('404', { docTitle: 'Page Not Found' });
-  // res.status(404).sendFile(path.join(rootDir, 'views', '404.html'));
-});
+app.use(pageNotFound);
 
 app.listen(PORT, () => {
   console.log(`server running on port ${PORT}`);

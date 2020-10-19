@@ -1,6 +1,6 @@
 // const path = require('path');
 // const { rootDir } = require('../utils');
-const products = [];
+const Product = require('../models/product');
 
 exports.getAddProduct = (req, res) => {
   res.render('add-product', { docTitle: 'Add Product', path: 'add-product' });
@@ -9,14 +9,18 @@ exports.getAddProduct = (req, res) => {
 };
 
 exports.postAddProduct = (req, res) => {
-  products.push({ title: req.body.title });
+  const product = new Product(req.body.title);
+  product.save();
+
   res.redirect('/');
 };
 
-exports.getShop = (req, res) => {
-  // use render() function to use the template engine
-  // specified
-  res.render('shop', { products, docTitle: 'Shop', path: 'shop' });
+exports.getProducts = (req, res) => {
+  Product.fetchAll((products) => {
+    // use render() function to use the template engine specified
+    res.render('shop', { products, docTitle: 'Shop', path: 'shop' });
+  });
+
   // use join method from path module to construct the path,
   // which is independent of OS it runs on,
   // since linux, mac and windows have a different
@@ -26,5 +30,3 @@ exports.getShop = (req, res) => {
   // use util method to get the rootDir where the node runs
   // res.sendFile(path.join(rootDir, 'views', 'shop.html'));
 };
-
-exports.products = products;
