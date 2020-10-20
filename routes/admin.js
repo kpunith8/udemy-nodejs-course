@@ -2,7 +2,7 @@ const express = require('express');
 const {
   getAddProduct,
   postAddProduct,
-} = require('../controllers/product-controller');
+} = require('../controllers/admin-controller');
 
 const router = express.Router();
 

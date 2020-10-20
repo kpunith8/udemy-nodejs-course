@@ -1,0 +1,14 @@
+extends ../layouts/main-layout.pug
+
+block main-content
+    main
+        h1 My Cart
+        if products.length > 0
+             .products
+                each product in products
+                    .product
+                        h4.product-title #{product.title}
+                        p.description #{product.description}
+                        p.price #{product.price}
+        else
+            .no-products No products in your cart!!
