@@ -33,9 +33,8 @@ app.use(bodyParser.json());
 
 // Only the routes starting with /admin/add-product will go through this
 // middleware, it is helpful to separate the routes starting point
-// app.use('/admin', adminRoutes);
-
-app.use(adminRoutes);
+app.use('/admin', adminRoutes);
+// app.use(adminRoutes);
 app.use(shopRoutes);
 
 app.get('/users', async (req, res) => {

@@ -1,0 +1,18 @@
+extends ../layouts/main-layout.pug
+
+block main-content
+    main
+        form(action="/admin/add-product", method="POST")
+            label Title
+            br
+            input(type="text", name="title")
+            br
+            label Description
+            br
+            input(type="text", name="description")
+            br
+            label Price
+            br
+            input(type="text", name="price")
+            br
+            button.btn-submit(type="submit") Add Product

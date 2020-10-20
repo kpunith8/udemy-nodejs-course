@@ -1,1 +1,5 @@
-[{"title":"Tomato"},{"title":"Bread"},{"title":"Smass"},{"title":"Another Product"}]
+[
+  { "title": "Bread", "description": "Nice", "price": "20" },
+  { "title": "Phone", "description": "Samsung", "price": "20000" },
+  { "title": "Book", "description": "Chemistry", "price": "400" }
+]
