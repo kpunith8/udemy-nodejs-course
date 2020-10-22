@@ -59,9 +59,10 @@ p {
 }
 
 .product {
-  flex: 0 1 350px;
-  padding-left: 15px;
+  flex: 0 1 400px;
+  padding: 15px;
   width: 200px;
+  margin-top: 20px;
   /* Card style */
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
   transition: 0.3s;
@@ -69,4 +70,23 @@ p {
 
 .product:hover {
   box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+}
+
+.btn-link {
+  display: block;
+  align-self: flex-end;
+  text-align: center;
+  text-decoration: none;
+  padding: 7px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+}
+
+.product-details {
+  background: rgb(163, 220, 243);
+}
+
+.add-to-cart {
+  margin-top: 10px;
+  width: 100%;
+  cursor: pointer;
 }

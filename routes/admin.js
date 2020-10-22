@@ -2,7 +2,10 @@ const express = require('express');
 const {
   getAddProduct,
   postAddProduct,
+  deleteProduct,
+  patchEditProduct,
 } = require('../controllers/admin-controller');
+const { deleteById } = require('../models/product');
 
 const router = express.Router();
 
@@ -13,5 +16,9 @@ const router = express.Router();
 router.get('/add-product', getAddProduct);
 
 router.post('/add-product', postAddProduct);
+
+router.patch('/add-product', patchEditProduct);
+
+router.delete('/add-product', deleteProduct);
 
 module.exports = router;
