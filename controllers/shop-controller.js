@@ -1,6 +1,7 @@
 // const path = require('path');
 // const { rootDir } = require('../utils');
 const Product = require('../models/product');
+const Cart = require('../models/cart');
 
 exports.getProducts = (req, res) => {
   Product.fetchAll((products) => {
@@ -24,9 +25,28 @@ exports.getProducts = (req, res) => {
 };
 
 exports.getCart = (req, res) => {
-  res.send([]);
+  Cart.fetchAll((allItems) => {
+    res.send(JSON.stringify(allItems, null, 2));
+  });
 };
 
 exports.getCheckout = (req, res) => {
   res.send([]);
+};
+
+exports.getProductDetail = (req, res) => {
+  const productId = req.params.id;
+
+  Product.findById(productId, (product) => {
+    res.send(JSON.stringify(product, null, 2));
+  });
+};
+
+exports.addToCart = (req, res) => {
+  const { productId } = req.body;
+  Product.findById(productId, (product) => {
+    Cart.addProduct(productId, product.price);
+
+    res.redirect('/cart');
+  });
 };

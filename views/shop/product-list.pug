@@ -10,5 +10,9 @@ block main-content
                         h4.product-title #{product.title}
                         p.description #{product.description}
                         p.price #{product.price}
+                        a(href=`/products/${product.id}`, class="btn-link product-details") Details
+                        form.add-item-cart(action="/cart", method="POST")
+                            button(type="submit", class="btn-link add-to-cart") Add To Cart
+                            input(type="hidden", name="productId" value=`${product.id}`)
         else
             .no-products No products in your cart!!
