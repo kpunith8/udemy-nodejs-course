@@ -5,7 +5,6 @@ const {
   deleteProduct,
   patchEditProduct,
 } = require('../controllers/admin-controller');
-const { deleteById } = require('../models/product');
 
 const router = express.Router();
 

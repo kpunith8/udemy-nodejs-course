@@ -7,7 +7,7 @@ block main-content
              .products
                 each product in products
                     .product
-                        h4.product-title #{product.title}
+                        h4.product-title #{product.name}
                         p.description #{product.description}
                         p.price #{product.price}
                         a(href=`/products/${product.id}`, class="btn-link product-details") Details

@@ -16,8 +16,10 @@
     "express": "^4.17.1",
     "express-handlebars": "^5.1.0",
     "lodash": "^4.17.20",
+    "mysql2": "^2.2.5",
     "nodemon": "^2.0.4",
     "pug": "^3.0.0",
+    "sequelize": "^6.3.5",
     "uuid": "^8.3.1"
   },
   "devDependencies": {

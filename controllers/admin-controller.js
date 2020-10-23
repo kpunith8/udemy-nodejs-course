@@ -1,3 +1,5 @@
+const { v4: uuidv4 } = require('uuid');
+
 const Product = require('../models/product');
 
 exports.getAddProduct = (req, res) => {
@@ -5,35 +7,78 @@ exports.getAddProduct = (req, res) => {
     docTitle: 'Add Product',
     path: 'add-product',
   });
-
-  // Send html file as result so that browser renders it
-  // res.sendFile(path.join(rootDir, 'views', 'add-product.html'));
 };
 
-exports.postAddProduct = (req, res) => {
-  const { price, title, description } = req.body;
-  const product = new Product(null, title, description, price);
-  product.save();
+exports.postAddProduct = async (req, res) => {
+  const { price, name, description } = req.body;
+  try {
+    // When an association made in sequelize for user model/table
+    // sequelize adds mixins/methods to insert the product
+    // without specifying the id of the user since sequelize knows
+    // relationship hasMany with the Product model/table
+    await req.user.createProduct({
+      id: uuidv4(),
+      price,
+      name,
+      description,
+    });
 
-  res.redirect('/products');
+    /* Pass userId from req.user.id to associate the user to product
+      Same as using the createProduct on user model */
+    // await Product.create({
+    //   id: uuidv4(),
+    //   price,
+    //   name,
+    //   description,
+    //   userId: req.user.id,
+    // });
+    res.redirect('/products');
+  } catch (err) {
+    console.log(err);
+  }
 };
 
 // PUT name can also be if you are updating all the fields in the
 // product to new value keeping the same product id
-exports.patchEditProduct = (req, res) => {
+exports.patchEditProduct = async (req, res) => {
   // Pass it within a hidden input field from products page on clicking edit button
   const { productId } = req.body;
-  const { price, title, description } = req.body;
-  const product = new Product(productId, title, description, price);
-  product.save();
+  const { price, name, description } = req.body;
+  try {
+    const updatedProduct = await Product.update(
+      { name, price, description },
+      { where: { id: productId } }
+    );
+    console.log(updatedProduct);
+    res.redirect('/products');
+  } catch (error) {
+    console.log(error);
+  }
 
-  res.redirect('/products');
+  /* Use product.save() to update by overwriting the each value or updated ones */
+  // try {
+  //   const product = await Product.findOne({ where: { id: productId } });
+  //   product.name = name;
+  //   product.price = price;
+  //   product.description = description;
+
+  //   // wrap try catch to handle errors
+  //   const updatedProduct = await product.save();
+  //   console.log(updatedProduct);
+  //   res.redirect('/products');
+  // } catch (err) {
+  //   console.log('err');
+  // }
 };
 
-exports.deleteProduct = (req, res) => {
+exports.deleteProduct = async (req, res) => {
   // Pass it within a hidden input field from products page on clicking edit button
   const { productId } = req.body;
+  try {
+    await Product.destroy({ where: { id: productId } });
 
-  Product.deleteById(productId);
-  res.redirect('/products');
+    res.redirect('/products');
+  } catch (err) {
+    console.log(err);
+  }
 };
