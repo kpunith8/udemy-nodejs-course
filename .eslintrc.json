@@ -12,5 +12,9 @@
   "parserOptions": {
     "ecmaVersion": 2018
   },
-  "rules": {}
+  "rules": {
+    "comma-dangle": "off",
+    "object-curly-newline": "off",
+    "no-underscore-dangle": "off"
+  }
 }

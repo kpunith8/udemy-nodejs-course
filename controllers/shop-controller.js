@@ -1,29 +1,13 @@
 const Product = require('../models/product');
 
-// Example usage for Use it with mysql2
-// exports.getProducts = (req, res) => {
-//   Product.fetchAll()
-//     .then(([rows]) => {
-//       res.render('shop/product-list', {
-//         products: rows,
-//         docTitle: 'Shop',
-//         path: 'shop',
-//       });
-//     })
-//     .catch((err) => console.log(err));
-// };
-
 exports.getProducts = async (req, res) => {
   try {
-    // const result = await Product.findAll();
-    // using user model associated with object to get only the products in
-    // scope not all the products.
-    const result = await req.user.getProducts();
+    const result = await Product.fetchAll();
 
     res.render('shop/product-list', {
       products: result,
       docTitle: 'Shop',
-      path: 'shop',
+      path: 'shop'
     });
   } catch (err) {
     console.log(err);
@@ -33,16 +17,13 @@ exports.getProducts = async (req, res) => {
 exports.getCart = async (req, res) => {
   const cart = await req.user.getCart();
 
-  const products = await cart.getProducts();
-
-  res.send(JSON.stringify(products, null, 2));
+  res.send(JSON.stringify(cart, null, 2));
 };
 
 exports.getProductDetail = async (req, res) => {
   const productId = req.params.id;
   try {
-    // findPk(primaryKey) can also be used instead of fineOne
-    const result = await Product.findOne({ where: { id: productId } });
+    const result = await Product.findById(productId);
     res.send(JSON.stringify(result, null, 2));
   } catch (err) {
     console.log(err);
@@ -51,64 +32,42 @@ exports.getProductDetail = async (req, res) => {
 
 exports.addToCart = async (req, res) => {
   const { productId } = req.body;
-  const cart = await req.user.getCart();
 
-  const [product] = await cart.getProducts({ where: { id: productId } });
-  let quantity = 1;
-  if (product) {
-    const oldQuantity = product.cartItem.quantity;
-    quantity = oldQuantity + 1;
-
-    cart.addProduct(product, { through: { quantity } });
-  } else {
-    const productToBeAdded = await Product.findOne({
-      where: { id: productId },
-    });
-    cart.addProduct(productToBeAdded, { through: { quantity } });
+  try {
+    const product = await Product.findById(productId);
+    req.user.addToCart(product);
+    res.redirect('/cart');
+  } catch (err) {
+    console.log(err);
   }
-
-  res.redirect('/cart');
 };
 
-exports.deleteCart = async (req, res) => {
+exports.deleteCartItem = async (req, res) => {
   const { productId } = req.body;
-
-  // Needs to wrap them within try..catch block
-  const cart = await req.user.getCart();
-  const [product] = await cart.getProducts({ where: { id: productId } });
-
-  await product.cartItem.destroy();
-
-  res.redirect('/cart');
+  try {
+    await req.user.deleteCartItem(productId);
+    console.log('Deleted the cart item!!');
+    res.redirect('/cart');
+  } catch (err) {
+    console.log(err);
+  }
 };
 
 // Below functions could be a candidate for order controller
-exports.postOrder = async (req, res) => {
-  // Each await should have their own try..catch block
-  const cart = await req.user.getCart();
-  const products = await cart.getProducts();
-  const order = await req.user.createOrder();
+exports.getOrders = async (req, res) => {
   try {
-    const orders = await order.addProducts(
-      products.map((product) => {
-        product.orderItem = { quantity: product.cartItem.quantity };
-        return product;
-      })
-    );
-    // Once cart items added to order remove them from the cart table
-    await cart.setProducts(null);
-
+    const orders = await req.user.getOrders();
     res.send(JSON.stringify(orders));
   } catch (err) {
     console.log(err);
   }
 };
 
-exports.getOrder = async (req, res) => {
+exports.postOrder = async (req, res) => {
   try {
-    // Eager loading, loads the orders with products array in it
-    const orders = await req.user.getOrders({ include: ['products'] });
-    res.send(JSON.stringify(orders));
+    await req.user.addOrder();
+    console.log('Order added!!!');
+    res.redirect('/orders');
   } catch (err) {
     console.log(err);
   }
