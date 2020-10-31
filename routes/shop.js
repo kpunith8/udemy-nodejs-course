@@ -4,9 +4,9 @@ const {
   getCart,
   getProductDetail,
   addToCart,
-  deleteCart,
+  deleteCartItem,
   postOrder,
-  getOrder,
+  getOrders,
 } = require('../controllers/shop-controller');
 
 const router = express.Router();
@@ -17,12 +17,12 @@ router.get('/cart', getCart);
 
 router.post('/cart', addToCart);
 
-router.delete('/cart', deleteCart);
+router.delete('/cart', deleteCartItem);
 
 // Create order routes and controller to separate the concerns
 router.post('/order', postOrder);
 
-router.get('/order', getOrder);
+router.get('/orders', getOrders);
 
 // NOTE: Always keep the specific route above the dynamic segments
 // if you have another route which starts like for eg:

@@ -24,6 +24,11 @@ Has dynamic routes examples and storing and retrieving data from the `file syste
 
 ### with-sql-db
 
-Has examples with `mysql2` and `sequelize ORM` using local DB (password mentioned in the
+Used  `mysql2` and `sequelize ORM` using local DB (password mentioned in the
 source will not work, you need to configure with your credentials),
 directly talks to `mysql` database (installed and configured in the local system)
+
+### with-mongo-db
+
+Used `mongoDB` and `mongodb` node package. (configure DB with your credentials).
+Directly talks to `mongoDB` database (mongo atlas cloud DB)

@@ -1,22 +1,25 @@
-const Sequelize = require('sequelize');
+const mongodb = require('mongodb');
 
-const sequelize = new Sequelize('shopping', 'root', 'admin_punith', {
-  dialect: 'mysql',
-  host: 'localhost',
-});
+const { MongoClient } = mongodb;
 
-module.exports = sequelize;
-/*  Using mysql2 */
-// const mysql = require('mysql2');
+let db;
 
-// const pool = mysql.createPool({
-//   host: 'localhost',
-//   user: 'root',
-//   password: 'admin_punith',
-//   database: 'shopping',
-//   waitForConnections: true,
-//   connectionLimit: 10,
-//   queueLimit: 0,
-// });
+exports.connectToMongoDB = (cb) => {
+  MongoClient.connect(
+    'mongodb+srv://root:root@mongo-cluster-qclzr.mongodb.net/shopping?retryWrites=true&w=majority',
+    { useUnifiedTopology: true }
+  )
+    .then((client) => {
+      console.log('DB Connection is successful!!');
+      db = client.db();
+      cb();
+    })
+    .catch((err) => console.log(err));
+};
 
-// module.exports = pool.promise();
+exports.getDB = () => {
+  if (db) {
+    return db;
+  }
+  throw new Error('No Database found!!');
+};
