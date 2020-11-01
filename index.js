@@ -2,13 +2,13 @@ const bodyParser = require('body-parser');
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
+const mongoose = require('mongoose');
 const adminRoutes = require('./routes/admin');
 const shopRoutes = require('./routes/shop');
 const { rootDir, loadUsersJson } = require('./utils');
 
 const { PORT } = require('./config');
 const { pageNotFound } = require('./controllers/error-controller');
-const { connectToMongoDB } = require('./utils/database');
 const User = require('./models/user');
 
 const app = express();
@@ -27,17 +27,14 @@ app.use(bodyParser.json());
 
 // Use a middleware to get the user and set it to req object so
 // that we can make use of the user
-// NOTE: Write this once the user table is seeded with an user with a specific ID
-app.use(async (req, res, next) => {
-  try {
-    const { name, cart, email, _id } = await User.findById(
-      '5f9d3b879bdfea06a3c9f276'
-    );
-    req.user = new User(name, email, cart, _id);
-    next();
-  } catch (err) {
-    console.log(err);
-  }
+// NOTE: Add this middleware once the user table is seeded with an user with a specific ID
+app.use((req, res, next) => {
+  User.findById('5f9d3b879bdfea06a3c9f276')
+    .then((user) => {
+      req.user = user;
+      next();
+    })
+    .catch((err) => console.log(err));
 });
 
 // Only the routes starting with /admin/add-product will go through this
@@ -59,8 +56,18 @@ app.get('/users', async (req, res) => {
 // Should be added at the end once all the routes are defined
 app.use(pageNotFound);
 
-connectToMongoDB(() => {
-  app.listen(PORT, () => {
-    console.log(`Listening on ${PORT}`);
-  });
-});
+(async () => {
+  try {
+    await mongoose.connect(
+      'mongodb+srv://root:root@mongo-cluster-qclzr.mongodb.net/shopping?retryWrites=true&w=majority',
+      { useUnifiedTopology: true, useNewUrlParser: true }
+    );
+    console.log('Connected to DB :)');
+
+    app.listen(PORT, () => {
+      console.log(`Listening on ${PORT}`);
+    });
+  } catch (err) {
+    console.log(err);
+  }
+})();

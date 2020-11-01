@@ -11,8 +11,9 @@ exports.postAddProduct = async (req, res) => {
   const { user } = req;
   const { price, name, description } = req.body;
   try {
-    const product = new Product(name, price, description, null, user.userId);
-    await product.save(product);
+    // pass user object to userId, mongoose grabs only the id and updates it.
+    const product = new Product({ name, price, description, userId: user._id });
+    await product.save();
     res.redirect('/products');
   } catch (err) {
     console.log(err);
@@ -22,22 +23,26 @@ exports.postAddProduct = async (req, res) => {
 exports.patchEditProduct = async (req, res) => {
   // Pass it within a hidden input field from products page on clicking edit button
   const { price, name, description, productId } = req.body;
-  const product = new Product(name, price, description, productId);
 
-  try {
-    await product.save();
-    console.log('Product Updated!!!');
-    res.redirect('/products');
-  } catch (error) {
-    console.log(error);
-  }
+  Product.findById(productId)
+    .then((product) => {
+      product.name = name;
+      product.description = description;
+      product.price = price;
+      return product.save();
+    })
+    .then((result) => {
+      console.log('Product Updated!!!', result);
+      res.redirect('/products');
+    })
+    .catch((err) => console.log(err));
 };
 
 exports.deleteProduct = async (req, res) => {
   // Pass it within a hidden input field from products page on clicking edit button
   const { productId } = req.body;
   try {
-    await Product.deleteById(productId);
+    await Product.deleteOne({ _id: productId });
     console.log('Product Deleted!!!');
     res.redirect('/products');
   } catch (err) {

@@ -1,9 +1,16 @@
 const Product = require('../models/product');
+const Order = require('../models/order');
 
 exports.getProducts = async (req, res) => {
   try {
-    const result = await Product.fetchAll();
+    const result = await Product.find();
+    /* To populate the user fields along with the product
+    because we have a userId reference in product,
+    could be helpful to display user info if needed */
+    // await Product.find().populate('userId')
 
+    /* To include only name and price and exclude _id from Product and name from User */
+    // await Product.find().select('name price -_id').populate('userId', 'name')
     res.render('shop/product-list', {
       products: result,
       docTitle: 'Shop',
@@ -15,7 +22,7 @@ exports.getProducts = async (req, res) => {
 };
 
 exports.getCart = async (req, res) => {
-  const cart = await req.user.getCart();
+  const cart = await req.user.populate('cart.items.productId').execPopulate();
 
   res.send(JSON.stringify(cart, null, 2));
 };
@@ -56,7 +63,7 @@ exports.deleteCartItem = async (req, res) => {
 // Below functions could be a candidate for order controller
 exports.getOrders = async (req, res) => {
   try {
-    const orders = await req.user.getOrders();
+    const orders = await Order.find();
     res.send(JSON.stringify(orders));
   } catch (err) {
     console.log(err);
@@ -64,9 +71,25 @@ exports.getOrders = async (req, res) => {
 };
 
 exports.postOrder = async (req, res) => {
+  const { name, _id } = req.user;
   try {
-    await req.user.addOrder();
+    const cartItems = await req.user
+      .populate('cart.items.productId')
+      .execPopulate();
+
+    const products = cartItems.cart.items.map((cartItem) => ({
+      product: { ...cartItem.productId._doc }, // To copy the whole object use, _.doc property
+      quantity: cartItem.quantity
+    }));
+
+    console.log(products, cartItems);
+
+    const order = new Order({ user: { name, userId: _id }, products });
+    order.save();
     console.log('Order added!!!');
+
+    await req.user.clearCartItems();
+
     res.redirect('/orders');
   } catch (err) {
     console.log(err);
