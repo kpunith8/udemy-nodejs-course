@@ -32,3 +32,7 @@ directly talks to `mysql` database (installed and configured in the local system
 
 Used `mongoDB` and `mongodb` node package. (configure DB with your credentials).
 Directly talks to `mongoDB` database (mongo atlas cloud DB)
+
+### with-mongoose-orm
+
+Used `mongoDB` with `mongoose` ORM for CRUD operations on the DB.
