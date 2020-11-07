@@ -11,8 +11,9 @@ block main-content
                         p.description #{product.description}
                         p.price #{product.price}
                         a(href=`/products/${product._id}`, class="btn-link product-details") Details
-                        form.add-item-cart(action="/cart", method="POST")
-                            button(type="submit", class="btn-link add-to-cart") Add To Cart
-                            input(type="hidden", name="productId" value=`${product._id}`)
+                        if isLoggedIn
+                            form.add-item-cart(action="/cart", method="POST")
+                                button(type="submit", class="btn-link add-to-cart") Add To Cart
+                                input(type="hidden", name="productId" value=`${product._id}`)
         else
             .no-products No products in your cart!!

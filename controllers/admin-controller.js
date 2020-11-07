@@ -3,12 +3,13 @@ const Product = require('../models/product');
 exports.getAddProduct = (req, res) => {
   res.render('admin/add-product', {
     docTitle: 'Add Product',
-    path: 'add-product'
+    path: 'add-product',
+    isLoggedIn: req.session.isLoggedIn,
   });
 };
 
 exports.postAddProduct = async (req, res) => {
-  const { user } = req;
+  const { user } = req.user;
   const { price, name, description } = req.body;
   try {
     // pass user object to userId, mongoose grabs only the id and updates it.

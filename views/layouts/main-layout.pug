@@ -11,6 +11,14 @@ html(lang="en")
                 ul.list
                     li.item
                         a(href="/products", class=(path === 'shop' ? 'active' : '')) Shop
-                    li.item
-                        a(href="/admin/add-product", class=(path === 'add-product' ? 'active' : '')) Add Product
+                    if isLoggedIn
+                        li.item
+                            a(href="/admin/add-product", class=(path === 'add-product' ? 'active' : '')) Add Product
+                ul.list
+                    if !isLoggedIn
+                        li.item(class="login")
+                            a(href="/login", class=(path === 'login' ? 'active' : '')) Login
+                    else
+                        li.item(class="logout")
+                            a(href="/logout", class='logout') Logout
         block main-content

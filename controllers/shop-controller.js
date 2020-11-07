@@ -14,7 +14,8 @@ exports.getProducts = async (req, res) => {
     res.render('shop/product-list', {
       products: result,
       docTitle: 'Shop',
-      path: 'shop'
+      path: 'shop',
+      isLoggedIn: req.session.isLoggedIn
     });
   } catch (err) {
     console.log(err);
@@ -81,8 +82,6 @@ exports.postOrder = async (req, res) => {
       product: { ...cartItem.productId._doc }, // To copy the whole object use, _.doc property
       quantity: cartItem.quantity
     }));
-
-    console.log(products, cartItems);
 
     const order = new Order({ user: { name, userId: _id }, products });
     order.save();

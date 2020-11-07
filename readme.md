@@ -36,3 +36,8 @@ Directly talks to `mongoDB` database (mongo atlas cloud DB)
 ### with-mongoose-orm
 
 Used `mongoDB` with `mongoose` ORM for CRUD operations on the DB.
+
+### session-cookies
+
+Store the session to mongoDB using `express-session` and `connect-mongodb-session` packages, and
+authenticate user with a data stored in cookie

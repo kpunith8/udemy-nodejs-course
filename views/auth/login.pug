@@ -1,0 +1,15 @@
+extends ../layouts/main-layout.pug
+
+block main-content
+    main
+        form(action="/login", method="POST", class="login-form")
+            label E-mail
+            br
+            input(type="email", name="email", id="email")
+            br
+            label Password
+            br
+            input(type="password", name="password", id="password")
+            br
+
+            button.btn-submit(type="submit") Login
