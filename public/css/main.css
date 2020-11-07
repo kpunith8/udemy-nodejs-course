@@ -11,11 +11,13 @@ nav {
   background: rgb(128, 197, 176);
   display: flex;
   align-items: center;
+  justify-content: space-between;
 }
 
 .list {
   list-style-type: none;
   display: flex;
+  align-items: center;
 }
 
 .item {
@@ -24,6 +26,14 @@ nav {
 
 .item a {
   text-decoration: none;
+}
+
+.login {
+  margin-right: 20px;
+}
+
+.logout {
+  margin-right: 20px;
 }
 
 .item a:hover {
