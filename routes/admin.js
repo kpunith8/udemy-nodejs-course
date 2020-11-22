@@ -3,8 +3,9 @@ const {
   getAddProduct,
   postAddProduct,
   deleteProduct,
-  patchEditProduct,
+  patchEditProduct
 } = require('../controllers/admin-controller');
+const isAuthenticated = require('../middleware/auth');
 
 const router = express.Router();
 
@@ -12,12 +13,12 @@ const router = express.Router();
 // be careful when using the use(), order in which routes are placed will have
 // an impact on routes you are accessing
 // Its better always to use specific routes
-router.get('/add-product', getAddProduct);
+router.get('/add-product', isAuthenticated, getAddProduct);
 
-router.post('/add-product', postAddProduct);
+router.post('/add-product', isAuthenticated, postAddProduct);
 
-router.patch('/add-product', patchEditProduct);
+router.patch('/add-product', isAuthenticated, patchEditProduct);
 
-router.delete('/add-product', deleteProduct);
+router.delete('/add-product', isAuthenticated, deleteProduct);
 
 module.exports = router;

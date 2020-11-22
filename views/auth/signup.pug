@@ -4,8 +4,12 @@ block main-content
     main
         if errorMessage.length > 0
             div(class="error-message") #{errorMessage}
-        form(action="/login", method="POST", class="login-form")
+        form(action="/signup", method="POST", class="login-form")
             input(type="hidden" value=csrfToken name="_csrf")
+            label E-mail
+            br
+            input(type="email", name="email", id="email")
+            br
             label User ID
             br
             input(type="text", name="userID", id="userID")
@@ -14,5 +18,9 @@ block main-content
             br
             input(type="password", name="password", id="password")
             br
+            label Confirm Password
+            br
+            input(type="password", name="confirmPassword", id="confirmPassword")
+            br
 
-            button.btn-submit(type="submit") Login
+            button.btn-submit(type="submit") SignUp

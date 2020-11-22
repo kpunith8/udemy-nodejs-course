@@ -3,6 +3,7 @@ extends ../layouts/main-layout.pug
 block main-content
     main
         form(action="/admin/add-product", method="POST", class="add-product-form")
+            input(type="hidden" value=csrfToken name="_csrf")
             label Name
             br
             input(type="text", name="name")

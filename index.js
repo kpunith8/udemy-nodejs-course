@@ -4,21 +4,25 @@ const cors = require('cors');
 const path = require('path');
 const mongoose = require('mongoose');
 const session = require('express-session');
+const csrf = require('csurf');
+const dotenv = require('dotenv');
+const flash = require('connect-flash');
 const MongoDBSession = require('connect-mongodb-session')(session);
+
 const adminRoutes = require('./routes/admin');
 const shopRoutes = require('./routes/shop');
 const authRoutes = require('./routes/auth');
-
 const { rootDir, loadUsersJson } = require('./utils');
-
-const { PORT, DB_URI } = require('./config');
+const { PORT } = require('./config');
 const { pageNotFound } = require('./controllers/error-controller');
 const User = require('./models/user');
 
+dotenv.config();
 const app = express();
+const csrfProtection = csrf();
 
-var store = new MongoDBSession({
-  uri: DB_URI,
+const store = new MongoDBSession({
+  uri: process.env.MONGO_URI,
   collection: 'loginSessions'
 });
 
@@ -42,8 +46,12 @@ app.use(
   })
 );
 
+// Add CSRF token after the session was created, since CSRF uses the session by default
+app.use(csrfProtection);
+app.use(flash());
+
 // Use a middleware to get the user and set it to req object so
-// that we can make use of the user
+// that we can make use of the user later in other routes
 // NOTE: Add this middleware once the user table is seeded with an user with a specific ID
 app.use((req, res, next) => {
   if (!req.session.user) {
@@ -55,6 +63,15 @@ app.use((req, res, next) => {
       next();
     })
     .catch((err) => console.log(err));
+});
+
+// Instead of setting to each view, use
+// res.locals object to set it and use it in each views
+app.use((req, res, next) => {
+  res.locals.isLoggedIn = req.session.isLoggedIn;
+  res.locals.csrfToken = req.csrfToken();
+
+  next();
 });
 
 // Only the routes starting with /admin/add-product will go through this
@@ -80,7 +97,7 @@ app.use(pageNotFound);
 
 (async () => {
   try {
-    await mongoose.connect(DB_URI, {
+    await mongoose.connect(process.env.MONGO_URI, {
       useUnifiedTopology: true,
       useNewUrlParser: true
     });

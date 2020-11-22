@@ -18,7 +18,11 @@ html(lang="en")
                     if !isLoggedIn
                         li.item(class="login")
                             a(href="/login", class=(path === 'login' ? 'active' : '')) Login
+                        li.item(class="signup")
+                            a(href="/signup", class=(path === 'signup' ? 'active' : '')) SignUp
                     else
                         li.item(class="logout")
-                            a(href="/logout", class='logout') Logout
+                            form(action="/logout" method="GET")
+                                input(type="hidden" value=csrfToken name="_csrf")
+                                button(type='submit' class="logout") Logout
         block main-content

@@ -6,23 +6,24 @@ const {
   addToCart,
   deleteCartItem,
   postOrder,
-  getOrders,
+  getOrders
 } = require('../controllers/shop-controller');
+const isAuthenticated = require('../middleware/auth');
 
 const router = express.Router();
 
 router.get('/products', getProducts);
 
-router.get('/cart', getCart);
+router.get('/cart', isAuthenticated, getCart);
 
-router.post('/cart', addToCart);
+router.post('/cart', isAuthenticated, addToCart);
 
-router.delete('/cart', deleteCartItem);
+router.delete('/cart', isAuthenticated, deleteCartItem);
 
 // Create order routes and controller to separate the concerns
-router.post('/order', postOrder);
+router.post('/order', isAuthenticated, postOrder);
 
-router.get('/orders', getOrders);
+router.get('/orders', isAuthenticated, getOrders);
 
 // NOTE: Always keep the specific route above the dynamic segments
 // if you have another route which starts like for eg:

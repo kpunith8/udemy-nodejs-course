@@ -40,4 +40,17 @@ Used `mongoDB` with `mongoose` ORM for CRUD operations on the DB.
 ### session-cookies
 
 Store the session to mongoDB using `express-session` and `connect-mongodb-session` packages, and
-authenticate user with a data stored in cookie
+authenticate user with a data stored in cookies.
+
+### authentication
+
+Create users with encrypting passwords using `bcryptjs` package, authenticate users with session.
+Protected routes
+
+Add `CSRF` tokens to avoid CSRF (Cross Site Request Forgery) attacks, using `csurf` package
+
+Use `connect-flash` package to capture the error in req and display on redirect programmatically.
+
+Sending email using `SendGrid` service and `nodemailer`, `nodemailer-sendgrid-transport` package
+
+Resetting passwords

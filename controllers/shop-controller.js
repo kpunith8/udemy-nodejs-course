@@ -15,7 +15,6 @@ exports.getProducts = async (req, res) => {
       products: result,
       docTitle: 'Shop',
       path: 'shop',
-      isLoggedIn: req.session.isLoggedIn
     });
   } catch (err) {
     console.log(err);
@@ -72,7 +71,7 @@ exports.getOrders = async (req, res) => {
 };
 
 exports.postOrder = async (req, res) => {
-  const { name, _id } = req.user;
+  const { userID, _id } = req.user;
   try {
     const cartItems = await req.user
       .populate('cart.items.productId')
@@ -83,7 +82,7 @@ exports.postOrder = async (req, res) => {
       quantity: cartItem.quantity
     }));
 
-    const order = new Order({ user: { name, userId: _id }, products });
+    const order = new Order({ user: { userID, userId: _id }, products });
     order.save();
     console.log('Order added!!!');
 

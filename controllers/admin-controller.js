@@ -4,16 +4,15 @@ exports.getAddProduct = (req, res) => {
   res.render('admin/add-product', {
     docTitle: 'Add Product',
     path: 'add-product',
-    isLoggedIn: req.session.isLoggedIn,
   });
 };
 
 exports.postAddProduct = async (req, res) => {
-  const { user } = req.user;
+  const { _id } = req.user;
   const { price, name, description } = req.body;
   try {
     // pass user object to userId, mongoose grabs only the id and updates it.
-    const product = new Product({ name, price, description, userId: user._id });
+    const product = new Product({ name, price, description, userId: _id });
     await product.save();
     res.redirect('/products');
   } catch (err) {
