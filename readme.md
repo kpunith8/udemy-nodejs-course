@@ -53,4 +53,5 @@ Use `connect-flash` package to capture the error in req and display on redirect 
 
 Sending email using `SendGrid` service and `nodemailer`, `nodemailer-sendgrid-transport` package
 
-Resetting passwords
+- Resetting passwords
+

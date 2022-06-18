@@ -3,3 +3,5 @@ node_modules/
 .requests.rest
 
 .env
+
+.DS_Store

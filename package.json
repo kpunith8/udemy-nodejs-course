@@ -10,6 +10,7 @@
   "author": "Punith K",
   "license": "ISC",
   "dependencies": {
+    "@sendgrid/mail": "^7.6.0",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.19.0",
     "connect-flash": "^0.1.1",
@@ -22,8 +23,6 @@
     "lodash": "^4.17.20",
     "mongodb": "^3.6.2",
     "mongoose": "^5.10.11",
-    "nodemailer": "^6.4.16",
-    "nodemailer-sendgrid-transport": "^0.2.0",
     "nodemon": "^2.0.4",
     "pug": "^3.0.0"
   },

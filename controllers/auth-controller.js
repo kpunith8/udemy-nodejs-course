@@ -1,17 +1,9 @@
-const nodemailer = require('nodemailer');
-const sendgridTransport = require('nodemailer-sendgrid-transport');
 const bcrypt = require('bcryptjs');
+const sgMail = require('@sendgrid/mail')
 
 const User = require('../models/user');
 
-const emailTransporter = nodemailer.createTransport(
-  sendgridTransport({
-    auth: {
-      api_key:
-        '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'
-    }
-  })
-);
+sgMail.setApiKey(process.env.SENDGRID_API_KEY)
 
 exports.getLogin = (req, res) => {
   res.render('auth/login', {
@@ -22,7 +14,6 @@ exports.getLogin = (req, res) => {
 };
 
 exports.postLogin = async (req, res) => {
-  console.log('send grid', process.env.SENDGRID_API_KEY);
   const { userID, password } = req.body;
 
   try {
@@ -63,6 +54,7 @@ exports.getSignup = (req, res) => {
 
 exports.postSignup = async (req, res) => {
   const { email, userID, password, confirmPassword } = req.body;
+  // TODO: Verify that the password and confirmPassword match before saving to the database
 
   const user = await User.findOne({ email, userID });
 
@@ -80,11 +72,11 @@ exports.postSignup = async (req, res) => {
       });
       newUser.save();
       res.redirect('/login');
-      await emailTransporter.sendMail({
+      await sgMail.send({
         from: 'kpunith8@gmail.com',
         to: email,
-        subject: 'Signup successful to Udemy node course',
-        html: '<p>Your successfully signed up to Udemy node course</p>'
+        subject: 'Signup successful to Udemy NodeJS course',
+        html: `<p>Your email ${email} successfully signed up to Udemy NodeJS course</p>`
       });
     } catch (err) {
       console.log(err);
