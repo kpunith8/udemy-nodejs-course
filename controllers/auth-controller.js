@@ -9,17 +9,17 @@ exports.getLogin = (req, res) => {
 };
 
 exports.postLogin = (req, res) => {
-  User.findById('5f9d3b879bdfea06a3c9f276')
+  User.findById('6375f811d283e3e80865fcee')
     .then((user) => {
+      console.log({user})
       req.session.user = user;
       req.session.isLoggedIn = true;
       // This is to make sure session is stored
       // before we re-direct to the products page
-      res.session.save((err) => {
+      req.session.save((err) => {
         res.redirect('/products');
       });
     })
-    .then()
     .catch((err) => console.log(err));
 };
 
